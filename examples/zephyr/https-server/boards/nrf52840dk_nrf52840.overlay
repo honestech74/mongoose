@@ -1,0 +1,55 @@
+/*
+ * Copyright (c) 2022 Pengxiang Gao
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+/delete-node/ &storage_partition;
+
+&spi3 {
+    status = "okay";
+	sck-pin = <47>;
+	miso-pin = <46>;
+	mosi-pin = <45>;
+    cs-gpios = <&gpio1 12 GPIO_ACTIVE_LOW>;
+
+    spi_w5500: w5500@0 {
+        compatible = "wiznet,w5500";
+        label = "w5500";
+        reg = <0x0>;
+        spi-max-frequency = <16000000>;
+        int-gpios = <&gpio1 11 GPIO_ACTIVE_LOW>;
+        reset-gpios = <&gpio1 10 GPIO_ACTIVE_LOW>;
+    };
+};
+
+&flash0 {
+	partitions {
+		storage_partition: partition@f8000 {
+			label = "storage";
+			reg = <0x000f8000 0x00001000>;
+		};
+
+		lfs1_part: partition@f9000 {
+			label = "littlefs_storage";
+			reg = <0x000f9000 0x00007000>;
+		};
+	};
+};
+
+/ {
+	fstab {
+		compatible = "zephyr,fstab";
+		lfs1: lfs1 {
+			compatible = "zephyr,fstab,littlefs";
+			mount-point = "/lfs1";
+			partition = <&lfs1_part>;
+			automount;
+			read-size = <16>;
+			prog-size = <16>;
+			cache-size = <64>;
+			lookahead-size = <32>;
+			block-cycles = <512>;
+		};
+	};
+};

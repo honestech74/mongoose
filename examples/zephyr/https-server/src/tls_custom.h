@@ -1,0 +1,9 @@
+#ifndef __CONFIG_TLS_MG_CUSTOM_H__
+
+// #define MBEDTLS_DEBUG_C
+#define MBEDTLS_X509_CRL_PARSE_C
+// #define MBEDTLS_SSL_DEBUG_ALL
+// #define MBEDTLS_SSL_SRV_C
+// #define MBEDTLS_SSL_CLI_C
+
+#endif /* __CONFIG_TLS_MG_CUSTOM_H__ */
